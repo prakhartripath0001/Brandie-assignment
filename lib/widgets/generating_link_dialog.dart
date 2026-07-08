@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 
 class GeneratingLinkDialog extends StatelessWidget {
-  const GeneratingLinkDialog({super.key});
+  final String message;
+
+  const GeneratingLinkDialog({
+    super.key,
+    this.message = 'Generating your sales link...',
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -18,9 +23,9 @@ class GeneratingLinkDialog extends StatelessWidget {
               valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
             ),
             const SizedBox(height: 24),
-            const Text(
-              'Generating your sales link...',
-              style: TextStyle(
+            Text(
+              message,
+              style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
               ),

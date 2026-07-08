@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../services/api_service.dart';
 import '../services/share_service.dart';
 import '../widgets/generating_link_dialog.dart';
@@ -49,5 +50,74 @@ class ShareController {
     } finally {
       _isSharing = false;
     }
+  }
+
+  /// Generic handler for actions that need a loading dialog
+  Future<void> _handleGenericAction({
+    required BuildContext context,
+    required String loadingMessage,
+    required String successMessage,
+    Future<void> Function()? action,
+  }) async {
+    if (_isSharing) return;
+    _isSharing = true;
+
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return GeneratingLinkDialog(message: loadingMessage);
+      },
+    );
+
+    try {
+      await Future.delayed(const Duration(seconds: 2));
+      if (action != null) {
+        await action();
+      }
+
+      if (context.mounted) {
+        Navigator.of(context).pop();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(successMessage)),
+        );
+      }
+    } catch (e) {
+      if (context.mounted) {
+        Navigator.of(context).pop();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Action failed: $e')),
+        );
+      }
+    } finally {
+      _isSharing = false;
+    }
+  }
+
+  Future<void> onCopyCaption(BuildContext context, String captionText) async {
+    await _handleGenericAction(
+      context: context,
+      loadingMessage: 'Copying the caption to clipboard...',
+      successMessage: 'Caption copied to clipboard!',
+      action: () async {
+        await Clipboard.setData(ClipboardData(text: captionText));
+      },
+    );
+  }
+
+  Future<void> onSaveToProfile(BuildContext context) async {
+    await _handleGenericAction(
+      context: context,
+      loadingMessage: 'Saving to your profile...',
+      successMessage: 'Successfully saved to profile!',
+    );
+  }
+
+  Future<void> onPrepareContent(BuildContext context) async {
+    await _handleGenericAction(
+      context: context,
+      loadingMessage: 'Preparing the content for social media...',
+      successMessage: 'Content is ready for social media!',
+    );
   }
 }

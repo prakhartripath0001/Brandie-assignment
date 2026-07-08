@@ -310,6 +310,45 @@ class _SmartPostCardState extends State<SmartPostCard> {
                     ),
                   ),
                 ),
+                const SizedBox(height: 12),
+
+                // New Action Buttons (Copy, Save, Prepare)
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: [
+                    ActionChip(
+                      backgroundColor: Colors.black.withOpacity(0.6),
+                      side: BorderSide.none,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                      labelStyle: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
+                      avatar: const Icon(Icons.copy, color: Colors.white, size: 14),
+                      label: const Text('Copy Caption'),
+                      onPressed: () => _shareController.onCopyCaption(
+                        context, 
+                        '✨ Experience the elegance of Eclat Amour... #EclatAmour Use my referral code: UK-AMANDA3012'
+                      ),
+                    ),
+                    ActionChip(
+                      backgroundColor: Colors.black.withOpacity(0.6),
+                      side: BorderSide.none,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                      labelStyle: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
+                      avatar: const Icon(Icons.bookmark_border, color: Colors.white, size: 14),
+                      label: const Text('Save to Profile'),
+                      onPressed: () => _shareController.onSaveToProfile(context),
+                    ),
+                    ActionChip(
+                      backgroundColor: Colors.black.withOpacity(0.6),
+                      side: BorderSide.none,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                      labelStyle: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
+                      avatar: const Icon(Icons.auto_fix_high, color: Colors.white, size: 14),
+                      label: const Text('Prepare Content'),
+                      onPressed: () => _shareController.onPrepareContent(context),
+                    ),
+                  ],
+                ),
                 const SizedBox(height: 16),
 
                 // Quick Share Row
