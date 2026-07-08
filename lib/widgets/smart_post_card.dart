@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../controllers/share_controller.dart';
+import '../screens/edit_caption_screen.dart';
 
 class SmartPostCard extends StatefulWidget {
   const SmartPostCard({super.key});
@@ -13,6 +14,8 @@ class _SmartPostCardState extends State<SmartPostCard> {
   int _currentPage = 0;
   final PageController _pageController = PageController();
   final ShareController _shareController = ShareController();
+  
+  String _caption = '✨ Experience the elegance of Eclat Amour—a fragrance that captures the essence of romance and sophistication. Let every spritz wrap you in timeless charm and effortless allure. 💖\n\n#EclatAmour #TimelessElegance\n\nUse my referral code: UK-AMANDA3012\nUse my referral link: www.oriflame.com/giordani/amada3012';
 
   final List<String> _images = [
     'assets/post1.jpg',
@@ -291,23 +294,9 @@ class _SmartPostCardState extends State<SmartPostCard> {
                     color: Colors.black.withOpacity(0.5),
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: const Text.rich(
-                    TextSpan(
-                      style: TextStyle(color: Colors.white, fontSize: 12, height: 1.4),
-                      children: [
-                        TextSpan(
-                          text: '✨ Experience the elegance of Eclat Amour—a fragrance that captures the essence of romance and sophistication. Let every spritz wrap you in timeless charm and effortless allure. 💖\n',
-                        ),
-                        TextSpan(
-                          text: '#EclatAmour #TimelessElegance\n',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        TextSpan(
-                          text: 'Use my referral code: UK-AMANDA3012\nUse my referral link: www.oriflame.com/giordani/amada3012',
-                          style: TextStyle(fontStyle: FontStyle.italic),
-                        ),
-                      ],
-                    ),
+                  child: Text(
+                    _caption,
+                    style: const TextStyle(color: Colors.white, fontSize: 12, height: 1.4),
                   ),
                 ),
                 const SizedBox(height: 12),
@@ -322,12 +311,30 @@ class _SmartPostCardState extends State<SmartPostCard> {
                       side: BorderSide.none,
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                       labelStyle: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
+                      avatar: const Icon(Icons.edit, color: Colors.white, size: 14),
+                      label: const Text('Edit Caption'),
+                      onPressed: () async {
+                        final updatedCaption = await Navigator.push<String>(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => EditCaptionScreen(initialCaption: _caption),
+                          ),
+                        );
+                        if (updatedCaption != null) {
+                          setState(() {
+                            _caption = updatedCaption;
+                          });
+                        }
+                      },
+                    ),
+                    ActionChip(
+                      backgroundColor: Colors.black.withOpacity(0.6),
+                      side: BorderSide.none,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                      labelStyle: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
                       avatar: const Icon(Icons.copy, color: Colors.white, size: 14),
                       label: const Text('Copy Caption'),
-                      onPressed: () => _shareController.onCopyCaption(
-                        context, 
-                        '✨ Experience the elegance of Eclat Amour... #EclatAmour Use my referral code: UK-AMANDA3012'
-                      ),
+                      onPressed: () => _shareController.onCopyCaption(context, _caption),
                     ),
                     ActionChip(
                       backgroundColor: Colors.black.withOpacity(0.6),
